@@ -1,0 +1,101 @@
+# Local rosdep rules for PAIRS packages not in the public rosdep index (ROS noetic).
+pairs_msgs:
+  ubuntu: [ros-noetic-pairs-msgs]
+pairs_lib:
+  ubuntu: [ros-noetic-pairs-lib]
+pairs_uav_hw_api:
+  ubuntu: [ros-noetic-pairs-uav-hw-api]
+pairs_uav_managers:
+  ubuntu: [ros-noetic-pairs-uav-managers]
+pairs_mpc_solvers:
+  ubuntu: [ros-noetic-pairs-mpc-solvers]
+pairs_uav_controllers:
+  ubuntu: [ros-noetic-pairs-uav-controllers]
+pairs_uav_trackers:
+  ubuntu: [ros-noetic-pairs-uav-trackers]
+pairs_uav_state_estimators:
+  ubuntu: [ros-noetic-pairs-uav-state-estimators]
+pairs_uav_trajectory_generation:
+  ubuntu: [ros-noetic-pairs-uav-trajectory-generation]
+pairs_uav_autostart:
+  ubuntu: [ros-noetic-pairs-uav-autostart]
+pairs_uav_status:
+  ubuntu: [ros-noetic-pairs-uav-status]
+pairs_multirotor_simulator:
+  ubuntu: [ros-noetic-pairs-multirotor-simulator]
+pairs_rviz_plugins:
+  ubuntu: [ros-noetic-pairs-rviz-plugins]
+pairs_uav_core:
+  ubuntu: [ros-noetic-pairs-uav-core]
+pairs_uav_testing:
+  ubuntu: [ros-noetic-pairs-uav-testing]
+pairs_uav_gazebo_simulation:
+  ubuntu: [ros-noetic-pairs-uav-gazebo-simulation]
+pairs_modules_msgs:
+  ubuntu: [ros-noetic-pairs-modules-msgs]
+pairs_utils:
+  ubuntu: [ros-noetic-pairs-utils]
+pairs_uav_modules:
+  ubuntu: [ros-noetic-pairs-uav-modules]
+pairs_camera_republisher:
+  ubuntu: [ros-noetic-pairs-camera-republisher]
+pairs_circle_flier:
+  ubuntu: [ros-noetic-pairs-circle-flier]
+pairs_euler_counter_example:
+  ubuntu: [ros-noetic-pairs-euler-counter-example]
+pairs_multireconfigure:
+  ubuntu: [ros-noetic-pairs-multireconfigure]
+pairs_sensor_info:
+  ubuntu: [ros-noetic-pairs-sensor-info]
+pairs_tf_connector:
+  ubuntu: [ros-noetic-pairs-tf-connector]
+pairs_tf_estimator:
+  ubuntu: [ros-noetic-pairs-tf-estimator]
+pairs_tf_mirror:
+  ubuntu: [ros-noetic-pairs-tf-mirror]
+pairs_tf_reconfigure:
+  ubuntu: [ros-noetic-pairs-tf-reconfigure]
+pairs_throw_activation:
+  ubuntu: [ros-noetic-pairs-throw-activation]
+pairs_serial:
+  ubuntu: [ros-noetic-pairs-serial]
+pairs_bumper:
+  ubuntu: [ros-noetic-pairs-bumper]
+pairs_pcl_tools:
+  ubuntu: [ros-noetic-pairs-pcl-tools]
+pairs_uav_trajectory_loader:
+  ubuntu: [ros-noetic-pairs-uav-trajectory-loader]
+pairs_uav_path_loader:
+  ubuntu: [ros-noetic-pairs-uav-path-loader]
+pairs_octomap_tools:
+  ubuntu: [ros-noetic-pairs-octomap-tools]
+pairs_octomap_server:
+  ubuntu: [ros-noetic-pairs-octomap-server]
+pairs_octomap_planner:
+  ubuntu: [ros-noetic-pairs-octomap-planner]
+pairs_subt_planning_lib:
+  ubuntu: [ros-noetic-pairs-subt-planning-lib]
+pairs_octomap_mapping_planning:
+  ubuntu: [ros-noetic-pairs-octomap-mapping-planning]
+ouster_ros:
+  ubuntu: [ros-noetic-ouster-ros]
+nimbro_network:
+  ubuntu: [ros-noetic-nimbro-network]
+nimbro_log_transport:
+  ubuntu: [ros-noetic-nimbro-log-transport]
+nimbro_net_monitor:
+  ubuntu: [ros-noetic-nimbro-net-monitor]
+nimbro_topic_transport:
+  ubuntu: [ros-noetic-nimbro-topic-transport]
+nimbro_cam_transport:
+  ubuntu: [ros-noetic-nimbro-cam-transport]
+nimbro_service_transport:
+  ubuntu: [ros-noetic-nimbro-service-transport]
+nimbro_tf_throttle:
+  ubuntu: [ros-noetic-nimbro-tf-throttle]
+nlopt:
+  ubuntu: [ros-noetic-nlopt]
+tmuxinator:
+  ubuntu: [tmuxinator]
+moreutils:
+  ubuntu: [moreutils]

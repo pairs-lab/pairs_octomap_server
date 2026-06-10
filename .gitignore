@@ -1,0 +1,25 @@
+# temp / editor files
+*~
+*.swp
+*.swo
+*.swn
+
+# build artifacts (catkin / colcon)
+build/
+devel/
+install/
+log/
+logs/
+.catkin_tools/
+*.pyc
+__pycache__/
+
+# Debian packaging artifacts (never commit built .deb / bloom output)
+packaging/output/
+debian/
+obj-*/
+*.deb
+*.ddeb
+
+# NOTE: any committed lib/**/*.so is a vendored prebuilt blob and MUST stay
+# tracked — do not add a blanket *.so ignore.
