@@ -1,129 +1,125 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.20.0)
 project(pairs_octomap_server)
 
-add_definitions(-DOCTOMAP_NODEBUGOUT)
-add_definitions(-O3)
+# set the correct standards
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# disables anoying googletest warning
-set(CATKIN_ENABLE_TESTING FALSE)
+# 1 == use rclcpp::Timer implementation
+# 0 == use PAIRS's thread timer implementation
+set(USE_ROS_TIMER 0)
 
-# disables anoying PCL warnings
-set(CMAKE_SUPPRESS_DEVELOPER_WARNINGS 1 CACHE INTERNAL "No dev warnings")
+if(${USE_ROS_TIMER})
+  MESSAGE(WARNING "[pairs_octomap_server]: Compiling with ROS Timers. This can cause high CPU load in runtime.")
+endif()
 
-set(CATKIN_DEPENDENCIES
-  cmake_modules
+# set the compile options to show code warnings
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
+if(ENABLE_COVERAGE)
+  message(WARNING "building for coverage, the performance might be limited")
+
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --coverage -fprofile-arcs")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage -fprofile-arcs")
+
+  add_definitions("-O1")
+  add_definitions("-g")
+endif()
+
+set(DEPENDENCIES
+  ament_cmake
+  rclcpp
+  rclcpp_components
+  Eigen3
+  sensor_msgs
+  std_srvs
+  std_msgs
   geometry_msgs
   laser_geometry
-  message_generation
-  message_runtime
   pairs_lib
   pairs_msgs
-  nodelet
+  octomap
   octomap_msgs
-  octomap_ros
-  pairs_octomap_tools
+  PCL
   pcl_conversions
-  pcl_msgs
   pcl_ros
-  roscpp
-  sensor_msgs
-  std_msgs
-  )
+  pairs_modules_msgs
+)
 
 set(LIBRARIES
-  PairsOctomapServer_Server
-  )
-
-find_package(OpenMP REQUIRED)
-
-find_package(octomap REQUIRED)
-
-find_package(PCL REQUIRED COMPONENTS
-  common
-  )
-
-# include Eigen3
-find_package(Eigen3 REQUIRED)
-set(Eigen_INCLUDE_DIRS ${EIGEN3_INCLUDE_DIRS})
-set(Eigen_LIBRARIES ${Eigen_LIBRARIES})
-
-find_package(catkin REQUIRED COMPONENTS
-  ${CATKIN_DEPENDENCIES}
-  )
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
-# add_compile_options("-fsanitize=address")
-# add_link_options("-fsanitize=address")
-
-add_compile_options("${PCL_COMPILE_OPTIONS}")
-
-add_message_files(DIRECTORY msg FILES
-  PoseWithSize.msg
+  PairsOctomapServer_OctomapServer
 )
 
-generate_messages(DEPENDENCIES
-  std_msgs
-  geometry_msgs
-)
-
-catkin_package(
-  INCLUDE_DIRS include
-  LIBRARIES ${LIBRARIES}
-  CATKIN_DEPENDS ${CATKIN_DEPENDENCIES}
-  DEPENDS OCTOMAP
-  )
+foreach(DEP IN LISTS DEPENDENCIES)
+  find_package(${DEP} REQUIRED)
+endforeach()
 
 include_directories(
   include
-  ${catkin_INCLUDE_DIRS}
-  ${Eigen_INCLUDE_DIRS}
-  ${OCTOMAP_INCLUDE_DIRS}
-  ${PCL_INCLUDE_DIRS}
-  )
-
-link_directories(
-  ${PCL_LIBRARIES}
+  ${rclcpp_INCLUDE_DIRS}
+  ${pairs_lib_INCLUDE_DIRS}
+  ${pairs_modules_msgs_INCLUDE_DIRS}
+  ${pairs_msgs_INCLUDE_DIRS}
 )
 
-# Server
+## --------------------------------------------------------------
+## |                           compile                          |
+## --------------------------------------------------------------
 
-add_library(PairsOctomapServer_Server
+add_library(PairsOctomapServer_OctomapServer SHARED
   src/octomap_server.cpp
   src/conversions.cpp
-  )
+)
 
-add_dependencies(PairsOctomapServer_Server
-  ${${PROJECT_NAME}_EXPORTED_TARGETS}
-  ${catkin_EXPORTED_TARGETS}
-  )
+ament_target_dependencies(PairsOctomapServer_OctomapServer
+  ${DEPENDENCIES}
+)
 
-target_include_directories(PairsOctomapServer_Server PUBLIC
-  ${PCL_INCLUDE_DIRS}
-  )
+rclcpp_components_register_nodes(PairsOctomapServer_OctomapServer PLUGIN "pairs_octomap_server::OctomapServer" EXECUTABLE PairsOctomapServer_OctomapServer)
 
-target_link_libraries(PairsOctomapServer_Server
-  ${catkin_LIBRARIES}
-  ${PCL_LIBRARIES}
-  ${OCTOMAP_LIBRARIES}
-  )
+target_compile_definitions(PairsOctomapServer_OctomapServer PRIVATE USE_ROS_TIMER=${USE_ROS_TIMER})
 
 ## --------------------------------------------------------------
-## |                           Install                          |
+## |                           install                          |
 ## --------------------------------------------------------------
 
-install(TARGETS ${LIBRARIES}
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
-  )
+ament_export_libraries(
+  ${LIBRARIES}
+)
 
-install(DIRECTORY launch config
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-  )
+install(
+  TARGETS ${LIBRARIES}
+  EXPORT export_${PROJECT_NAME}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
 
-install(FILES nodelets.xml
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-  )
+install(
+  DIRECTORY include/
+  DESTINATION include/
+)
+
+install(
+  DIRECTORY launch
+  DESTINATION share/${PROJECT_NAME}
+)
+
+install(
+  DIRECTORY config
+  DESTINATION share/${PROJECT_NAME}
+)
+
+ament_export_targets(
+  export_${PROJECT_NAME} HAS_LIBRARY_TARGET
+)
+
+ament_export_dependencies(
+  ${DEPENDENCIES}
+)
+
+ament_package()

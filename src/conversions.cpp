@@ -1,5 +1,5 @@
 #include <pairs_octomap_server/conversions.h>
-#include <sensor_msgs/point_cloud2_iterator.h>
+#include <sensor_msgs/point_cloud2_iterator.hpp>
 
 namespace octomap
 {
@@ -12,10 +12,10 @@ namespace octomap
  * @param points
  * @param cloud
  */
-void pointsOctomapToPointCloud2(const point3d_list& points, sensor_msgs::PointCloud2& cloud) {
+void pointsOctomapToPointCloud2(const point3d_list& points, sensor_msgs::msg::PointCloud2& cloud) {
 
   // make sure the channel is valid
-  std::vector<sensor_msgs::PointField>::const_iterator field_iter = cloud.fields.begin(), field_end = cloud.fields.end();
+  std::vector<sensor_msgs::msg::PointField>::const_iterator field_iter = cloud.fields.begin(), field_end = cloud.fields.end();
 
   bool has_x, has_y, has_z;
   has_x = has_y = has_z = false;
@@ -54,7 +54,7 @@ void pointsOctomapToPointCloud2(const point3d_list& points, sensor_msgs::PointCl
  * @param cloud
  * @param octomapCloud
  */
-void pointCloud2ToOctomap(const sensor_msgs::PointCloud2& cloud, Pointcloud& octomapCloud) {
+void pointCloud2ToOctomap(const sensor_msgs::msg::PointCloud2& cloud, Pointcloud& octomapCloud) {
   octomapCloud.reserve(cloud.data.size() / cloud.point_step);
 
   sensor_msgs::PointCloud2ConstIterator<float> iter_x(cloud, "x");

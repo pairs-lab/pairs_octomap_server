@@ -1,5 +1,0 @@
-<library path="lib/libPairsOctomapServer_Server">
-  <class name="pairs_octomap_server/PairsOctomapServer" type="pairs_octomap_server::OctomapServer" base_class_type="nodelet::Nodelet">
-    <description>PairsOctomapServer nodelet</description>
-  </class>
-</library>

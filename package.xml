@@ -1,37 +1,36 @@
 <?xml version="1.0"?>
-<package format="2">
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
 
   <name>pairs_octomap_server</name>
-  <version>1.0.0</version>
-  <description>PAIRS OctoMap Server</description>
+  <version>2.0.0</version>
+  <description>PAIRS Octomap server</description>
 
   <maintainer email="canhthanh@vnu.edu.vn">Thanh Nguyen Canh</maintainer>
   <author email="canhthanh@vnu.edu.vn">Thanh Nguyen Canh</author>
 
   <license>BSD 3-Clause</license>
 
-  <buildtool_depend>catkin</buildtool_depend>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake_ros</buildtool_depend>
 
-  <depend>cmake_modules</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_components</depend>
   <depend>geometry_msgs</depend>
-  <depend>laser_geometry</depend>
-  <depend>message_generation</depend>
-  <depend>message_runtime</depend>
-  <depend>pairs_lib</depend>
-  <depend>pairs_msgs</depend>
-  <depend>nodelet</depend>
-  <depend>octomap_msgs</depend>
-  <depend>octomap_ros</depend>
-  <depend>pairs_octomap_tools</depend>
-  <depend>pcl_conversions</depend>
-  <depend>pcl_msgs</depend>
-  <depend>pcl_ros</depend>
-  <depend>roscpp</depend>
   <depend>sensor_msgs</depend>
   <depend>std_msgs</depend>
+  <depend>std_srvs</depend>
+  <depend>laser_geometry</depend>
+  <depend>pairs_lib</depend>
+  <depend>pairs_msgs</depend>
+  <depend>octomap</depend>
+  <depend>octomap_msgs</depend>
+  <depend>pcl_conversions</depend>
+  <depend>pcl_ros</depend>
+  <depend>pairs_modules_msgs</depend>
 
   <export>
-    <nodelet plugin="${prefix}/nodelets.xml" />
+    <build_type>ament_cmake</build_type>
   </export>
 
 </package>

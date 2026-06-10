@@ -37,18 +37,22 @@
 
 #ifndef OCTOMAP_ROS_CONVERSIONS_H
 #define OCTOMAP_ROS_CONVERSIONS_H
+// ROS2
+#include <rclcpp/rclcpp.hpp>
 
-#include <ros/ros.h>
+// Octomap
 #include <octomap/octomap.h>
 
-#include <sensor_msgs/PointCloud2.h>
-#include <geometry_msgs/Point.h>
-#include <geometry_msgs/Vector3.h>
-#include <geometry_msgs/Pose.h>
-#include <geometry_msgs/Quaternion.h>
+// Messages ROS2
+#include <sensor_msgs/msg/point_cloud2.hpp>  
+#include <geometry_msgs/msg/point.hpp>        
+#include <geometry_msgs/msg/vector3.hpp>      
+#include <geometry_msgs/msg/pose.hpp>         
+#include <geometry_msgs/msg/quaternion.hpp>   
 
-#include <tf2/transform_datatypes.h>
-#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+// TF2
+#include <tf2/transform_datatypes.h>           
+#include <tf2_geometry_msgs/tf2_geometry_msgs.hpp> 
 
 namespace octomap
 {
@@ -60,7 +64,7 @@ namespace octomap
  * @param points
  * @param cloud
  */
-void pointsOctomapToPointCloud2(const point3d_list& points, sensor_msgs::PointCloud2& cloud);
+void pointsOctomapToPointCloud2(const point3d_list& points, sensor_msgs::msg::PointCloud2& cloud);
 
 /**
  * @brief Conversion from a sensor_msgs::PointCLoud2 to
@@ -70,11 +74,11 @@ void pointsOctomapToPointCloud2(const point3d_list& points, sensor_msgs::PointCl
  * @param octomapCloud
  */
 
-void pointCloud2ToOctomap(const sensor_msgs::PointCloud2& cloud, Pointcloud& octomapCloud);
+void pointCloud2ToOctomap(const sensor_msgs::msg::PointCloud2& cloud, Pointcloud& octomapCloud);
 
 /// Conversion from octomap::point3d to geometry_msgs::Point
-static inline geometry_msgs::Point pointOctomapToMsg(const point3d& octomapPt) {
-  geometry_msgs::Point pt;
+static inline geometry_msgs::msg::Point pointOctomapToMsg(const point3d& octomapPt) {
+  geometry_msgs::msg::Point pt;
   pt.x = octomapPt.x();
   pt.y = octomapPt.y();
   pt.z = octomapPt.z();
@@ -83,13 +87,13 @@ static inline geometry_msgs::Point pointOctomapToMsg(const point3d& octomapPt) {
 }
 
 /// Conversion from geometry_msgs::Point to octomap::point3d
-static inline octomap::point3d pointMsgToOctomap(const geometry_msgs::Point& ptMsg) {
+static inline octomap::point3d pointMsgToOctomap(const geometry_msgs::msg::Point& ptMsg) {
   return octomap::point3d(ptMsg.x, ptMsg.y, ptMsg.z);
 }
 
 /// Conversion from octomap::point3d to tf2::Point
-static inline geometry_msgs::Point pointOctomapToTf(const point3d& octomapPt) {
-  geometry_msgs::Point pt;
+static inline geometry_msgs::msg::Point pointOctomapToTf(const point3d& octomapPt) {
+  geometry_msgs::msg::Point pt;
   pt.x = octomapPt.x();
   pt.y = octomapPt.y();
   pt.z = octomapPt.z();
@@ -97,11 +101,11 @@ static inline geometry_msgs::Point pointOctomapToTf(const point3d& octomapPt) {
 }
 
 /// Conversion from tf2::Point to octomap::point3d
-static inline octomap::point3d pointTfToOctomap(const geometry_msgs::Point& ptTf) {
+static inline octomap::point3d pointTfToOctomap(const geometry_msgs::msg::Point& ptTf) {
   return point3d(ptTf.x, ptTf.y, ptTf.z);
 }
 
-static inline octomap::point3d pointTfToOctomap(const geometry_msgs::Vector3& ptTf) {
+static inline octomap::point3d pointTfToOctomap(const geometry_msgs::msg::Vector3& ptTf) {
   return point3d(ptTf.x, ptTf.y, ptTf.z);
 }
 
@@ -115,27 +119,27 @@ static inline octomath::Quaternion quaternionTfToOctomap(const tf2::Quaternion& 
   return octomath::Quaternion(qTf.w(), qTf.x(), qTf.y(), qTf.z());
 }
 
-static inline octomath::Quaternion quaternionTfToOctomap(const geometry_msgs::Quaternion& qTf) {
+static inline octomath::Quaternion quaternionTfToOctomap(const geometry_msgs::msg::Quaternion& qTf) {
   return octomath::Quaternion(qTf.w, qTf.x, qTf.y, qTf.z);
 }
 
 /// Conversion from octomap::pose6f to tf2::Pose
-static inline geometry_msgs::Pose poseOctomapToTf(const octomap::pose6d& octomapPose) {
+static inline geometry_msgs::msg::Pose poseOctomapToTf(const octomap::pose6d& octomapPose) {
   auto                      r = quaternionOctomapToTf(octomapPose.rot());
-  geometry_msgs::Quaternion orientation;
+  geometry_msgs::msg::Quaternion orientation;
   orientation.x = r.x();
   orientation.y = r.y();
   orientation.z = r.z();
   orientation.w = r.w();
 
-  geometry_msgs::Pose pose;
+  geometry_msgs::msg::Pose pose;
   pose.position    = pointOctomapToTf(octomapPose.trans());
   pose.orientation = orientation;
   return pose;
 }
 
 /// Conversion from tf2::Pose to octomap::pose6d
-static inline octomap::pose6d poseTfToOctomap(const geometry_msgs::Pose& poseTf) {
+static inline octomap::pose6d poseTfToOctomap(const geometry_msgs::msg::Pose& poseTf) {
   return octomap::pose6d(pointTfToOctomap(poseTf.position), quaternionTfToOctomap(poseTf.orientation));
 }
 }  // namespace octomap

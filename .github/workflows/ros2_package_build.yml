@@ -1,0 +1,27 @@
+name: ros2_package_build
+on:
+  push:
+    branches: [ ros2 ]
+    paths-ignore: [ '**/README.md' ]
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up ROS 2 Jazzy
+        uses: ros-tooling/setup-ros@v0.7
+        with:
+          required-ros-distributions: jazzy
+      - name: Build
+        run: |
+          source /opt/ros/jazzy/setup.bash
+          sudo apt-get install -y python3-colcon-common-extensions python3-rosdep
+          rosdep update
+          mkdir -p ~/colcon_ws/src && cp -r . ~/colcon_ws/src/pairs_octomap_server
+          cd ~/colcon_ws
+          rosdep install --from-paths src --ignore-src -r -y || true
+          colcon build --packages-select pairs_octomap_server
